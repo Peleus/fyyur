@@ -12,16 +12,20 @@ import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
+from flask_migrate import Migrate
+
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
+
+#FLASK_APP=app.py FLASK_ENV=development flask run
 
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-# TODO: connect to a local postgresql database
+migrate = Migrate(app, db)
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -38,6 +42,14 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    #genres
+    #website link
+    #Looking for talent
+    #seeking description
+    #past shows []
+    #upcoming shows []
+    #past_shows_count - calculated for return
+    #upcoming_shows_count - calculated for return
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -52,6 +64,13 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    #web link
+    #Looking for Venues
+    #seeking description
+    #past shows
+    #upcoming shows
+    #Past count
+    #upcoming count
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 

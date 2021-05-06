@@ -1,0 +1,24 @@
+{
+  "name": "starter_code",
+  "version": "1.0.0",
+  "description": "Fyyur\r -----",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^3.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peleus/fyyur.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Peleus/fyyur/issues"
+  },
+  "homepage": "https://github.com/Peleus/fyyur#readme"
+}
