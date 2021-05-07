@@ -42,16 +42,14 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    #genres
-    #website link
-    #Looking for talent
-    #seeking description
-    #past shows []
-    #upcoming shows []
-    #past_shows_count - calculated for return
-    #upcoming_shows_count - calculated for return
+    genres = db.Column(db.String(120))
+    website = db.Column(db.String(500))
+    seeking_talent = db.Column(db.Boolean, unique=False, default=True)
+    seeking_description = db.Column(db.String(500))
+    shows = db.relationship('Show', backref='venue', lazy=True)
 
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
+    def __repr__(self):
+      return f'<Venue {self.name} {self.city} {self.state} {self.address} {self.phone} {self.image_link} {self.facebook_link} {self.genres} {self.website} {self.seeking_talent} {self.seeking_description} {self.shows}>'
 
 class Artist(db.Model):
     __tablename__ = 'Artist'
@@ -64,17 +62,18 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    #web link
-    #Looking for Venues
-    #seeking description
-    #past shows
-    #upcoming shows
-    #Past count
-    #upcoming count
+    website = db.Column(db.String(500))
+    seeking_venue = db.Column(db.Boolean, unique=False, default=True)
+    seeking_description = db.Column(db.String(500))
+    shows = db.relationship('Show', backref='artist', lazy=True)
 
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
-
-# TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
+class Show(db.Model):
+    __tablename__ = 'Show'
+  
+    id = db.Column(db.Integer, primary_key=True)
+    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
 
 #----------------------------------------------------------------------------#
 # Filters.
@@ -106,6 +105,31 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
+  
+  newData = []
+  
+  for value in Venue.query.distinct(Venue.city):
+    venueCity = {}
+    venueCity['city'] = value.city
+    newData.append(venueCity)
+
+  print(newData)
+  
+  '''
+  venues = Venue.query.all()
+   
+  newData = []
+  
+ 
+  for row in venues:
+    venue = {}
+    venue['city'] = row.city
+    venue['state'] = row.state
+    newData.append(venue)
+    '''
+
+  #print(newData)
+
   data=[{
     "city": "San Francisco",
     "state": "CA",
@@ -240,6 +264,32 @@ def create_venue_form():
 def create_venue_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
+  error = False
+  #body = {}
+  try:
+    thisVenue = Venue(name=request.form.get('name'),
+        city=request.form.get('city'),
+        state=request.form.get('state'),
+        address=request.form.get('address'),
+        phone=request.form.get('phone'),
+        image_link=request.form.get('image_link'),
+        facebook_link=request.form.get('facebook_link'),
+        genres=request.form.get('genres'),
+        website=request.form.get('website'),
+        seeking_talent=request.form.get('seeking_talent', default=False, type=bool),
+        seeking_description=request.form.get('seeking_description'),
+        shows=request.form.getlist('shows')
+    )
+    db.session.add(thisVenue)
+    db.session.commit()
+    #body['description'] = todo.description
+  except:
+    error = True
+    db.session.rollback()
+    #print(sys.exc_info())
+  finally:
+    db.session.close()
+  
 
   # on successful db insert, flash success
   flash('Venue ' + request.form['name'] + ' was successfully listed!')
