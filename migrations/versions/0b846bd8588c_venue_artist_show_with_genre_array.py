@@ -1,16 +1,16 @@
-"""Set up data for artist, venue, and show
+"""Venue, artist, show with genre array
 
-Revision ID: 414db40a6ab5
+Revision ID: 0b846bd8588c
 Revises: 52639269325b
-Create Date: 2021-05-06 15:20:06.797255
+Create Date: 2021-05-10 22:17:19.984787
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '414db40a6ab5'
+revision = '0b846bd8588c'
 down_revision = '52639269325b'
 branch_labels = None
 depends_on = None
@@ -30,7 +30,7 @@ def upgrade():
     op.add_column('Artist', sa.Column('seeking_description', sa.String(length=500), nullable=True))
     op.add_column('Artist', sa.Column('seeking_venue', sa.Boolean(), nullable=True))
     op.add_column('Artist', sa.Column('website', sa.String(length=500), nullable=True))
-    op.add_column('Venue', sa.Column('genres', sa.String(length=120), nullable=True))
+    op.add_column('Venue', sa.Column('genres', postgresql.ARRAY(sa.String(length=120)), nullable=True))
     op.add_column('Venue', sa.Column('seeking_description', sa.String(length=500), nullable=True))
     op.add_column('Venue', sa.Column('seeking_talent', sa.Boolean(), nullable=True))
     op.add_column('Venue', sa.Column('website', sa.String(length=500), nullable=True))
@@ -42,7 +42,7 @@ def downgrade():
     op.drop_column('Venue', 'website')
     op.drop_column('Venue', 'seeking_talent')
     op.drop_column('Venue', 'seeking_description')
-    op.drop_column('Venue', 'genres')
+    op.drop_column('Artist', 'genres')
     op.drop_column('Artist', 'website')
     op.drop_column('Artist', 'seeking_venue')
     op.drop_column('Artist', 'seeking_description')
