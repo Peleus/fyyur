@@ -20,9 +20,8 @@ from datetime import datetime
 # App Config.
 #----------------------------------------------------------------------------#
 
-#FLASK_APP=app.py FLASK_ENV=development flask run
-
-#https://www.facebook.com/NightFlightOfficial/
+#To Run: FLASK_APP=app.py FLASK_ENV=development flask run
+#Test Facebook link format - https://www.facebook.com/NightFlightOfficial/
 
 app = Flask(__name__)
 moment = Moment(app)
@@ -113,7 +112,6 @@ def index():
 
 @app.route('/venues')
 def venues():
-  # num_shows should be aggregated based on number of upcoming shows per venue.
   data = []
   areas = Venue.query.distinct('city', 'state')
   for area in areas:
@@ -378,8 +376,8 @@ def edit_artist_submission(artist_id):
       artist.genres = form.genres.data
       artist.facebook_link = form.facebook_link.data,
       artist.website_link = form.website_link.data,
-      artist.seeking_talent = form.seeking_venue.data,
-      artist.seeking_description = form.seeking_description.data
+      artist.seeking_description = form.seeking_description.data,
+      artist.seeking_venue = bool(form.seeking_venue.data)
       
       db.session.commit()
       flash('Artist ' + artist.name + ' was successfully edited!')
@@ -424,8 +422,8 @@ def edit_venue_submission(venue_id):
       venue.genres = form.genres.data
       venue.facebook_link = form.facebook_link.data,
       venue.website_link = form.website_link.data,
-      venue.seeking_talent = form.seeking_talent.data,
       venue.seeking_description = form.seeking_description.data
+      venue.seeking_talent = bool(form.seeking_talent.data)
       
       db.session.commit()
       flash('Venue ' + venue.name + ' was successfully edited!')
@@ -532,7 +530,6 @@ def create_show_submission():
       venue_id=request.form.get("venue_id"),
       start_time=request.form.get("start_time")
     )
-    print(thisShow)
     db.session.add(thisShow)
     db.session.commit()
   except:
