@@ -165,7 +165,6 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
-  error = False
   try:
     thisVenue = Venue(name=request.form.get('name'),
         city=request.form.get('city'),
@@ -184,7 +183,6 @@ def create_venue_submission():
     db.session.commit()
     flash('Venue ' + request.form['name'] + ' was successfully listed!')
   except:
-    error = True
     db.session.rollback()
     flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
   finally:
@@ -327,19 +325,13 @@ def edit_artist_submission(artist_id):
       
       db.session.commit()
       flash('Artist ' + artist.name + ' was successfully edited!')
-    except ValueError:
-      error = True
+    except:
       db.session.rollback()
       flash('Artist ' + artist.name + ' could not be edited!')
     finally:
       db.session.close()
   else:
-    message=[]
-    print(form.errors.items())
-    
-    for field, errors in form.errors.items():
-      message.append(form[field].label + ', '.join(errors))
-      flash('Errors: ' + '|'.join(message))
+    flash('Errors in validation')
   
   return redirect(url_for('show_artist', artist_id=artist_id))
 
@@ -374,19 +366,13 @@ def edit_venue_submission(venue_id):
       
       db.session.commit()
       flash('Venue ' + venue.name + ' was successfully edited!')
-    except ValueError:
-      error = True
+    except:
       db.session.rollback()
       flash('Venue ' + venue.name + ' could not be edited!')
     finally:
       db.session.close()
   else:
-    message=[]
-    print(form.errors.items())
-    
-    for field, errors in form.errors.items():
-      message.append(form[field].label + ', '.join(errors))
-      flash('Errors: ' + '|'.join(message))
+    flash('Errors in validation')
 
   return redirect(url_for('show_venue', venue_id=venue_id))
 
@@ -401,8 +387,6 @@ def create_artist_form():
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
   # called upon submitting the new artist listing form
-  
-  error = False
   try:
     thisArtist = Artist(name=request.form.get('name'),
         city=request.form.get('city'),
@@ -420,7 +404,6 @@ def create_artist_submission():
     db.session.commit()
     flash('Artist ' + request.form['name'] + ' was successfully listed!')
   except:
-    error = True
     db.session.rollback()
     flash('An error occurred. Artist ' + request.form.name + ' could not be listed.')
   finally:
