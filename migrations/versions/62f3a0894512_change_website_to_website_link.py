@@ -23,6 +23,7 @@ def upgrade():
     op.drop_column('Artist', 'website')
     op.add_column('Venue', sa.Column('website_link', sa.String(length=500), nullable=True))
     op.drop_column('Venue', 'website')
+    op.drop_column('Artist', 'genres')
     op.add_column('Artist', sa.Column('genres', postgresql.ARRAY(sa.String(length=120)), nullable=True))
     # ### end Alembic commands ###
 
