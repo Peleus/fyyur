@@ -2,6 +2,8 @@
 # Imports
 #----------------------------------------------------------------------------#
 
+from db import app, db
+from models import *
 import json
 import dateutil.parser
 import babel
@@ -23,13 +25,10 @@ from datetime import datetime
 #To Run: FLASK_APP=app.py FLASK_ENV=development flask run
 #Test Facebook link format - https://www.facebook.com/NightFlightOfficial/
 
-app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
-db = SQLAlchemy(app)
-
 migrate = Migrate(app, db)
-
+'''
 #----------------------------------------------------------------------------#
 # Models.
 #----------------------------------------------------------------------------#
@@ -83,7 +82,7 @@ class Show(db.Model):
 
     def __repr__(self):
       return f'<Show {self.artist_id} {self.venue_id} {self.start_time}>'
-
+'''
 #----------------------------------------------------------------------------#
 # Filters.
 #----------------------------------------------------------------------------#
